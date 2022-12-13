@@ -1,9 +1,16 @@
 package lk.psi.temiwelcomeguest
 
+import android.content.ContentValues
+import android.content.DialogInterface
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.Toast
+import android.widget.VideoView
+import androidx.appcompat.app.AlertDialog
 
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.*
@@ -23,6 +30,26 @@ class MainActivity : AppCompatActivity(), Robot.TtsListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        val videoPath = "android.resource://" + packageName + "/" + R.raw.temiscreen
+        val uri = Uri.parse(videoPath)
+        val videoView = findViewById<VideoView>(R.id.videoView)
+        videoView.setVideoURI(uri)
+        videoView.requestFocus()
+
+        videoView.setOnCompletionListener {
+            Toast.makeText(this@MainActivity, "thanks for watching", Toast.LENGTH_SHORT).show()
+        }
+        videoView.setOnErrorListener { mp, what, extra ->
+            Toast.makeText(this@MainActivity, "thanks for watching", Toast.LENGTH_SHORT).show()
+            false
+        }
+        videoView.setOnPreparedListener{ mp ->
+            videoView.start()
+            mp!!.isLooping = true;
+            Log.i(ContentValues.TAG, "Video Started");
+        }
+
         // Temi
         robot = Robot.getInstance()
 
@@ -31,13 +58,6 @@ class MainActivity : AppCompatActivity(), Robot.TtsListener,
 
 //        mq.subscribe(topic)
 
-        var btn = findViewById<Button>(R.id.button1);
-        btn.setOnClickListener{
-
-            Log.i("MainActivity","mq ${mq}")
-            mq.subscribe(topic)
-
-        }
     }
 
 
@@ -79,7 +99,7 @@ class MainActivity : AppCompatActivity(), Robot.TtsListener,
                     place,
                     backwards = false,
                     noBypass = false,
-                    speedLevel = SpeedLevel.MEDIUM
+                    speedLevel = SpeedLevel.SLOW
                 )
             }
         }
@@ -98,5 +118,17 @@ class MainActivity : AppCompatActivity(), Robot.TtsListener,
 
     fun cancelAllTts(){
         robot.cancelAllTtsRequests()
+    }
+
+    fun showAlert(view : View){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("show sample dialog")
+        builder.setMessage("this is the content of the alert")
+        builder.setIcon(R.drawable.ic_launcher_background)
+        builder.setPositiveButton("ok", DialogInterface.OnClickListener{ dialog, which ->
+            dialog.dismiss()
+        })
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 }
