@@ -57,6 +57,7 @@ class MQTTClient {
 
             override fun connectionLost(cause: Throwable?) {
                 Log.d(TAG, "Connection lost ${cause.toString()}")
+                mainActivity.showAlert("connection lost to MQTT server")
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -79,6 +80,7 @@ class MQTTClient {
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                     Log.d(TAG, "Connection failure ${exception}")
+                    mainActivity.showAlert("connection failed to MQTT server")
                 }
             })
         } catch (e: MqttException) {

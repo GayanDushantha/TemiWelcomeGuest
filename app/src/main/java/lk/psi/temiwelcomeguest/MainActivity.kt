@@ -120,10 +120,10 @@ class MainActivity : AppCompatActivity(), Robot.TtsListener,
         robot.cancelAllTtsRequests()
     }
 
-    fun showAlert(view : View){
+    fun showAlert(message: String){
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle("show sample dialog")
-        builder.setMessage("this is the content of the alert")
+        builder.setTitle("Error Occurred")
+        builder.setMessage(message)
         builder.setIcon(R.drawable.ic_launcher_background)
         builder.setPositiveButton("ok", DialogInterface.OnClickListener{ dialog, which ->
             dialog.dismiss()
