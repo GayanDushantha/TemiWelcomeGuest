@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), Robot.TtsListener,
 
     override fun onTtsStatusChanged(ttsRequest: TtsRequest) {
         Log.i("NavigationActivity", "onTtsStatusChonTtsStatusChangedanged ${TtsRequest}")
-        mq.publish(topic,"TTS Status changed ${TtsRequest}")
+        mq.publish(topic,"TTS Status changed $ttsRequest")
     }
 
     override fun onGoToLocationStatusChanged(
